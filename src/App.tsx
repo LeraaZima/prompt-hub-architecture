@@ -1,25 +1,34 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter, useLocation } from 'react-router-dom';
+import Header from './components/Header';
+import Footer from './components/Footer';
+import Breadcrumbs from './components/Breadcrumbs';
+import Sidebar from './components/Sidebar';
+import AppRoutes from './routes';
+
+function Layout() {
+  const location = useLocation();
+  const showSidebar = location.pathname === '/hub';
+
+  return (
+    <div>
+      <Header />
+      <Breadcrumbs />
+      <div style={{ display: 'flex' }}>
+        {showSidebar && <Sidebar />}
+        <main style={{ flex: 1, padding: '1rem' }}>
+          <AppRoutes />
+        </main>
+      </div>
+      <Footer />
+    </div>
+  );
+}
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BrowserRouter>
+      <Layout />
+    </BrowserRouter>
   );
 }
 
