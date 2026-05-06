@@ -8,6 +8,7 @@ import TemplatesPage from '../pages/TemplatesPage';
 import ProfilePage from '../pages/ProfilePage';
 import MyTemplatesPage from '../pages/MyTemplatesPage';
 import FavoritesPage from '../pages/FavoritesPage';
+import SearchPage from '../pages/SearchPage';
 
 export default function AppRoutes() {
   return (
@@ -21,6 +22,7 @@ export default function AppRoutes() {
       <Route path="/profile" element={<ProfilePage />} />
       <Route path="/profile/my-templates" element={<MyTemplatesPage />} />
       <Route path="/profile/favorites" element={<FavoritesPage />} />
+      <Route path="/search" element={<SearchPage />} />
     </Routes>
   );
 }
