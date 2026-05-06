@@ -1,6 +1,6 @@
 ## Карта навигации (Mermaid)
 
-```mermaid
+
 graph TD
   A[Главная /] --> B[Промпт-хаб /hub]
   A --> C[База знаний /knowledge]
