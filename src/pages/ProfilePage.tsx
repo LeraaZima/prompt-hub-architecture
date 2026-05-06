@@ -1,7 +1,8 @@
-import { Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
+import { useAuth } from '../context/AuthContext';
 
 const profileSchema = z.object({
   displayName: z.string().min(2, 'Имя не менее 2 символов'),
@@ -11,35 +12,47 @@ const profileSchema = z.object({
 type ProfileFormData = z.infer<typeof profileSchema>;
 
 export default function ProfilePage() {
+  const { user, isAuthenticated, loading } = useAuth();
+  
   const { register, handleSubmit, formState: { errors } } = useForm<ProfileFormData>({
     resolver: zodResolver(profileSchema),
-    defaultValues: { displayName: '', email: '' }
+    defaultValues: { displayName: user?.name || '', email: user?.email || '' }
   });
 
   const onSubmit = (data: ProfileFormData) => {
     console.log('Профиль обновлён', data);
-    alert('Данные сохранены');
+    alert('✅ Данные сохранены');
   };
 
+  if (loading) {
+    return <div style={{ textAlign: 'center', padding: '3rem' }}>Загрузка...</div>;
+  }
+
+  if (!isAuthenticated) {
+    return <Navigate to="/" replace />;
+  }
+
   return (
-    <div>
-      <h1>Личный кабинет</h1>
-      <nav style={{ marginBottom: '2rem' }}>
-        <Link to="/profile/my-templates" style={{ marginRight: '1rem' }}>Мои шаблоны</Link>
-        <Link to="/profile/favorites">Избранное</Link>
-      </nav>
-      <form onSubmit={handleSubmit(onSubmit)} style={{ display: 'flex', flexDirection: 'column', gap: '1rem', maxWidth: '400px' }}>
-        <div>
-          <label>Имя</label>
-          <input {...register('displayName')} />
-          {errors.displayName && <span style={{ color: 'red' }}>{errors.displayName.message}</span>}
+    <div className="form-container">
+      <h1 style={{ fontSize: '2rem', marginBottom: '1rem' }}>👤 Личный кабинет</h1>
+      
+      <div style={{ display: 'flex', gap: '1rem', marginBottom: '2rem' }}>
+        <Link to="/profile/my-templates" className="btn btn-secondary">📄 Мои шаблоны</Link>
+        <Link to="/profile/favorites" className="btn btn-secondary">❤️ Избранное</Link>
+      </div>
+      
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <div className="form-group">
+          <label>👤 Имя</label>
+          <input {...register('displayName')} placeholder="Введите ваше имя" />
+          {errors.displayName && <span className="error-message">⚠️ {errors.displayName.message}</span>}
         </div>
-        <div>
-          <label>Email</label>
-          <input {...register('email')} />
-          {errors.email && <span style={{ color: 'red' }}>{errors.email.message}</span>}
+        <div className="form-group">
+          <label>📧 Email</label>
+          <input {...register('email')} type="email" placeholder="your@email.com" />
+          {errors.email && <span className="error-message">⚠️ {errors.email.message}</span>}
         </div>
-        <button type="submit">Обновить профиль</button>
+        <button type="submit" className="btn">Обновить информацию</button>
       </form>
     </div>
   );

@@ -1,23 +1,31 @@
 import { BrowserRouter, useLocation } from 'react-router-dom';
+import { PromptProvider } from './context/PromptContext';
+import { AuthProvider } from './context/AuthContext';
 import Header from './components/Header';
 import Footer from './components/Footer';
-import Breadcrumbs from './components/Breadcrumbs';
 import Sidebar from './components/Sidebar';
 import AppRoutes from './routes';
+import SkipLink from './components/SkipLink';
 
 function Layout() {
   const location = useLocation();
   const showSidebar = location.pathname === '/hub';
 
   return (
-    <div>
+    <div className="app-wrapper">
+      <SkipLink />
       <Header />
-      <Breadcrumbs />
-      <div style={{ display: 'flex' }}>
-        {showSidebar && <Sidebar />}
-        <main style={{ flex: 1, padding: '1rem' }}>
-          <AppRoutes />
-        </main>
+      <div className="main-content fade-in-up">
+        <div style={{ display: 'flex', gap: '2rem' }}>
+          {showSidebar && (
+            <div style={{ width: '280px', flexShrink: 0 }}>
+              <Sidebar />
+            </div>
+          )}
+          <main id="main-content" style={{ flex: 1 }}>
+            <AppRoutes />
+          </main>
+        </div>
       </div>
       <Footer />
     </div>
@@ -27,7 +35,11 @@ function Layout() {
 function App() {
   return (
     <BrowserRouter>
-      <Layout />
+      <AuthProvider>
+        <PromptProvider>
+          <Layout />
+        </PromptProvider>
+      </AuthProvider>
     </BrowserRouter>
   );
 }
