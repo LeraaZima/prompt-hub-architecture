@@ -7,10 +7,13 @@ import Sidebar from './components/Sidebar';
 import AppRoutes from './routes';
 import SkipLink from './components/SkipLink';
 import ThemeToggle from './components/ThemeToggle';
+import { useState } from 'react';
 
 function Layout() {
   const location = useLocation();
   const showSidebar = location.pathname === '/hub';
+  const [sidebarFilter, setSidebarFilter] = useState('all');
+  const [sidebarTag, setSidebarTag] = useState('all');
 
   return (
     <div className="app-wrapper">
@@ -20,11 +23,19 @@ function Layout() {
         <div style={{ display: 'flex', gap: '2rem' }}>
           {showSidebar && (
             <div style={{ width: '280px', flexShrink: 0 }}>
-              <Sidebar />
+              <Sidebar 
+                onFilterChange={setSidebarFilter}
+                onTagSelect={setSidebarTag}
+                selectedTag={sidebarTag}
+                currentFilter={sidebarFilter}
+              />
             </div>
           )}
           <main id="main-content" style={{ flex: 1 }}>
-            <AppRoutes />
+            <AppRoutes 
+              sidebarFilter={sidebarFilter}
+              sidebarTag={sidebarTag}
+            />
           </main>
         </div>
       </div>

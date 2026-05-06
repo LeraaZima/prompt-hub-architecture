@@ -1,25 +1,80 @@
-import { useState } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { usePrompts } from "../context/PromptContext";
 import { useCopyToClipboard } from "../hooks/useCopyToClipboard";
 
-export default function HubPage() {
+interface HubPageProps {
+  sidebarFilter?: string;
+  sidebarTag?: string;
+}
+
+export default function HubPage({
+  sidebarFilter = "all",
+  sidebarTag = "all",
+}: HubPageProps) {
   const { getPublicPrompts, toggleFavorite, favorites } = usePrompts();
-  const { copyToClipboard, copied } = useCopyToClipboard();
+  const { copyToClipboard } = useCopyToClipboard();
   const publicPrompts = getPublicPrompts();
-  const [filter, setFilter] = useState("all");
+
+  const [filterType, setFilterType] = useState("all");
+  const [selectedTag, setSelectedTag] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
   const [copiedId, setCopiedId] = useState<string | null>(null);
 
-  const filteredPrompts = publicPrompts.filter((prompt) => {
-    const matchesFilter =
-      filter === "all" ||
-      (filter === "favorites" && favorites.includes(prompt.id));
-    const matchesSearch =
-      searchTerm === "" ||
-      prompt.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      prompt.tags.toLowerCase().includes(searchTerm.toLowerCase());
-    return matchesFilter && matchesSearch;
-  });
+  // Синхронизация с сайдбаром
+  useEffect(() => {
+    setFilterType(sidebarFilter);
+  }, [sidebarFilter]);
+
+  useEffect(() => {
+    setSelectedTag(sidebarTag);
+  }, [sidebarTag]);
+
+  // Собираем все теги
+  const allTags = useMemo(() => {
+    const tagsSet = new Set<string>();
+    publicPrompts.forEach((prompt) => {
+      if (prompt.tags) {
+        prompt.tags.split(",").forEach((tag) => {
+          tagsSet.add(tag.trim());
+        });
+      }
+    });
+    return Array.from(tagsSet).sort();
+  }, [publicPrompts]);
+
+  // Фильтрация
+  const filteredPrompts = useMemo(() => {
+    let result = [...publicPrompts];
+
+    // Фильтр по избранному
+    if (filterType === "favorites") {
+      result = result.filter((p) => favorites.includes(p.id));
+    }
+
+    // Фильтр по тегам (только если выбран конкретный тег, не 'all')
+    if (selectedTag !== "all") {
+      result = result.filter(
+        (p) =>
+          p.tags &&
+          p.tags
+            .split(",")
+            .map((t) => t.trim())
+            .includes(selectedTag),
+      );
+    }
+
+    // Поиск
+    if (searchTerm) {
+      const term = searchTerm.toLowerCase();
+      result = result.filter(
+        (p) =>
+          p.title.toLowerCase().includes(term) ||
+          (p.tags && p.tags.toLowerCase().includes(term)),
+      );
+    }
+
+    return result;
+  }, [publicPrompts, filterType, selectedTag, searchTerm, favorites]);
 
   const handleCopy = async (id: string, content: string) => {
     const success = await copyToClipboard(content);
@@ -27,6 +82,12 @@ export default function HubPage() {
       setCopiedId(id);
       setTimeout(() => setCopiedId(null), 2000);
     }
+  };
+
+  const clearFilters = () => {
+    setFilterType("all");
+    setSelectedTag("all");
+    setSearchTerm("");
   };
 
   return (
@@ -47,30 +108,70 @@ export default function HubPage() {
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           style={{
-            flex: 1,
+            flex: 2,
             padding: "0.75rem",
             borderRadius: "12px",
-            border: "2px solid #e2e8f0",
+            border: "2px solid var(--border-color)",
             fontSize: "1rem",
             background: "var(--bg-primary)",
             color: "var(--text-primary)",
           }}
         />
+
         <select
-          value={filter}
-          onChange={(e) => setFilter(e.target.value)}
+          value={filterType}
+          onChange={(e) => setFilterType(e.target.value)}
           style={{
             padding: "0.75rem 1.5rem",
             borderRadius: "12px",
-            border: "2px solid #e2e8f0",
+            border: "2px solid var(--border-color)",
             background: "var(--bg-primary)",
             color: "var(--text-primary)",
           }}
         >
-          <option value="all">Все промпты</option>
-          <option value="favorites">⭐ Избранное</option>
+          <option value="all">📋 Все промпты</option>
+          <option value="favorites">❤️ Избранное ({favorites.length})</option>
         </select>
+
+        <select
+          value={selectedTag}
+          onChange={(e) => setSelectedTag(e.target.value)}
+          style={{
+            padding: "0.75rem 1.5rem",
+            borderRadius: "12px",
+            border: "2px solid var(--border-color)",
+            background: "var(--bg-primary)",
+            color: "var(--text-primary)",
+          }}
+        >
+          <option value="all">🏷️ Все теги</option>
+          {allTags.map((tag) => (
+            <option key={tag} value={tag}>
+              #{tag}
+            </option>
+          ))}
+        </select>
+
+        {(filterType !== "all" || selectedTag !== "all" || searchTerm) && (
+          <button
+            onClick={clearFilters}
+            className="btn-secondary"
+            style={{ padding: "0.75rem 1.5rem" }}
+          >
+            🗑️ Сбросить фильтры
+          </button>
+        )}
       </div>
+
+      <p
+        style={{
+          marginBottom: "1rem",
+          color: "var(--text-muted)",
+          fontSize: "0.875rem",
+        }}
+      >
+        Найдено: {filteredPrompts.length} из {publicPrompts.length} промптов
+      </p>
 
       <div style={{ display: "grid", gap: "1.5rem" }}>
         {filteredPrompts.map((prompt) => (
@@ -89,7 +190,7 @@ export default function HubPage() {
                 </h3>
                 <p
                   style={{
-                    color: "var(--gray)",
+                    color: "var(--text-secondary)",
                     fontSize: "0.875rem",
                     marginBottom: "0.5rem",
                   }}
@@ -101,7 +202,15 @@ export default function HubPage() {
                     style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" }}
                   >
                     {prompt.tags.split(",").map((tag, i) => (
-                      <span key={i} className="tag">
+                      <span
+                        key={i}
+                        className={`tag ${selectedTag === tag.trim() ? "tag-active" : ""}`}
+                        onClick={() => setSelectedTag(tag.trim())}
+                        style={{
+                          transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+                          cursor: "pointer",
+                        }}
+                      >
                         #{tag.trim()}
                       </span>
                     ))}
@@ -118,7 +227,7 @@ export default function HubPage() {
                     cursor: "pointer",
                     padding: "0.5rem",
                   }}
-                  title="Копировать в буфер"
+                  title="Копировать"
                 >
                   {copiedId === prompt.id ? "✅" : "📋"}
                 </button>
@@ -145,6 +254,13 @@ export default function HubPage() {
             style={{ textAlign: "center", padding: "3rem" }}
           >
             <p>Ничего не найдено 😢</p>
+            <button
+              onClick={clearFilters}
+              className="btn"
+              style={{ marginTop: "1rem" }}
+            >
+              Сбросить фильтры
+            </button>
           </div>
         )}
       </div>

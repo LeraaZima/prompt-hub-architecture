@@ -16,12 +16,17 @@ function PageLoader() {
   return <div style={{ padding: '2rem', textAlign: 'center' }}>Загрузка...</div>;
 }
 
-export default function AppRoutes() {
+interface AppRoutesProps {
+  sidebarFilter?: string;
+  sidebarTag?: string;
+}
+
+export default function AppRoutes({ sidebarFilter, sidebarTag }: AppRoutesProps) {
   return (
     <Suspense fallback={<PageLoader />}>
       <Routes>
         <Route path="/" element={<HomePage />} />
-        <Route path="/hub" element={<HubPage />} />
+        <Route path="/hub" element={<HubPage sidebarFilter={sidebarFilter} sidebarTag={sidebarTag} />} />
         <Route path="/editor" element={<EditorPage />} />
         <Route path="/editor/:id" element={<EditorPage />} />
         <Route path="/knowledge" element={<KnowledgePage />} />
