@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -23,6 +24,10 @@ export default function ProfilePage() {
   return (
     <div>
       <h1>Личный кабинет</h1>
+      <nav style={{ marginBottom: '2rem' }}>
+        <Link to="/profile/my-templates" style={{ marginRight: '1rem' }}>Мои шаблоны</Link>
+        <Link to="/profile/favorites">Избранное</Link>
+      </nav>
       <form onSubmit={handleSubmit(onSubmit)} style={{ display: 'flex', flexDirection: 'column', gap: '1rem', maxWidth: '400px' }}>
         <div>
           <label>Имя</label>
