@@ -6,6 +6,7 @@ import Footer from './components/Footer';
 import Sidebar from './components/Sidebar';
 import AppRoutes from './routes';
 import SkipLink from './components/SkipLink';
+import ThemeToggle from './components/ThemeToggle';
 
 function Layout() {
   const location = useLocation();
@@ -28,6 +29,7 @@ function Layout() {
         </div>
       </div>
       <Footer />
+      <ThemeToggle />
     </div>
   );
 }
