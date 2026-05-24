@@ -1,66 +1,52 @@
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
+import { AuthProvider } from '../context/AuthContext';
+import { PromptProvider } from '../context/PromptContext';
 import SearchBar from '../components/SearchBar';
 
-// Мокаем useDebounce, чтобы не ждать реального таймера
 jest.mock('../hooks/useDebounce', () => ({
   useDebounce: (value: string) => value
 }));
 
-// Мокаем fetchSuggestions внутри компонента (глобально)
-jest.mock('../components/SearchBar', () => {
-  const original = jest.requireActual('../components/SearchBar');
-  return {
-    __esModule: true,
-    default: function MockSearchBar(props: any) {
-      // Просто рендерим оригинал, но подменяем fetchSuggestions
-      const Actual = original.default;
-      return <Actual {...props} />;
-    }
-  };
-});
+const renderWithProviders = (component: React.ReactElement) => {
+  return render(
+    <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+      <AuthProvider>
+        <PromptProvider>
+          {component}
+        </PromptProvider>
+      </AuthProvider>
+    </BrowserRouter>
+  );
+};
 
 describe('SearchBar Component', () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    // Очищаем DOM перед каждым тестом
-    document.body.innerHTML = '';
   });
 
   test('поиск рендерится без ошибок', () => {
-    render(
-      <BrowserRouter>
-        <SearchBar />
-      </BrowserRouter>
-    );
+    renderWithProviders(<SearchBar />);
     const input = screen.getByPlaceholderText(/Поиск промптов/i);
     expect(input).toBeInTheDocument();
   });
 
-  test('поиск показывает алерт при менее 3 символах', async () => {
+  test('поиск показывает алерт при менее 2 символах', () => {
     const alertMock = jest.spyOn(window, 'alert').mockImplementation(() => {});
-    render(
-      <BrowserRouter>
-        <SearchBar />
-      </BrowserRouter>
-    );
+    renderWithProviders(<SearchBar />);
     const input = screen.getByPlaceholderText(/Поиск промптов/i);
-    fireEvent.change(input, { target: { value: 'te' } });
+    fireEvent.change(input, { target: { value: 't' } });
     const button = screen.getByRole('button', { name: 'Найти' });
     fireEvent.click(button);
-    expect(alertMock).toHaveBeenCalledWith('Введите минимум 3 символа');
+    expect(alertMock).toHaveBeenCalledWith('Введите минимум 2 символа');
     alertMock.mockRestore();
   });
 
-  test('поиск не вызывает алерт при 3+ символах', async () => {
+  test('поиск не вызывает алерт при 2+ символах', () => {
     const alertMock = jest.spyOn(window, 'alert').mockImplementation(() => {});
-    render(
-      <BrowserRouter>
-        <SearchBar />
-      </BrowserRouter>
-    );
+    renderWithProviders(<SearchBar />);
     const input = screen.getByPlaceholderText(/Поиск промптов/i);
-    fireEvent.change(input, { target: { value: 'test' } });
+    fireEvent.change(input, { target: { value: 'te' } });
     const button = screen.getByRole('button', { name: 'Найти' });
     fireEvent.click(button);
     expect(alertMock).not.toHaveBeenCalled();

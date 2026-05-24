@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "types": ["node", "react", "react-scripts"],
+    "types": ["jest", "node", "react", "react-scripts"],
     "target": "es5",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
@@ -17,6 +17,5 @@
     "noEmit": true,
     "jsx": "react-jsx"
   },
-  "include": ["src"],
-  "exclude": ["node_modules", "**/*.test.ts", "**/*.test.tsx"]
+  "include": ["src", "e2e"]
 }
