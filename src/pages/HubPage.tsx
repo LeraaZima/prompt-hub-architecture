@@ -13,7 +13,7 @@ export default function HubPage({ sidebarFilter = 'all', sidebarTag = 'all' }: H
   const { getPublicPrompts, toggleFavorite, favorites } = usePrompts();
   const { copyToClipboard } = useCopyToClipboard();
   const publicPrompts = getPublicPrompts();
-
+  
   const [filterType, setFilterType] = useState('all');
   const [selectedTag, setSelectedTag] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
@@ -33,13 +33,13 @@ export default function HubPage({ sidebarFilter = 'all', sidebarTag = 'all' }: H
       result = result.filter(p => favorites.includes(p.id));
     }
     if (selectedTag !== 'all') {
-      result = result.filter(p =>
+      result = result.filter(p => 
         p.tags && p.tags.split(',').map(t => t.trim()).includes(selectedTag)
       );
     }
     if (searchTerm) {
       const term = searchTerm.toLowerCase();
-      result = result.filter(p =>
+      result = result.filter(p => 
         p.title.toLowerCase().includes(term) ||
         (p.tags && p.tags.toLowerCase().includes(term))
       );
@@ -64,7 +64,7 @@ export default function HubPage({ sidebarFilter = 'all', sidebarTag = 'all' }: H
   return (
     <div>
       <h1 style={{ marginBottom: '1rem' }}>📚 Промпт-хаб</h1>
-
+      
       <div style={{ display: 'flex', gap: '1rem', marginBottom: '2rem', flexWrap: 'wrap', alignItems: 'center' }}>
         <input
           type="text"
@@ -93,12 +93,12 @@ export default function HubPage({ sidebarFilter = 'all', sidebarTag = 'all' }: H
       <p style={{ marginBottom: '1rem', color: 'var(--text-muted)', fontSize: '0.875rem' }}>
         Найдено: {filteredPrompts.length} из {publicPrompts.length} промптов
       </p>
-
+      
       <div style={{ display: 'grid', gap: '1.5rem' }}>
         {filteredPrompts.map((prompt) => (
-          <div
-            key={prompt.id}
-            className="card"
+          <div 
+            key={prompt.id} 
+            className="card" 
             onClick={() => navigate(`/hub/prompt/${prompt.id}`)}
             style={{ cursor: 'pointer' }}
           >
@@ -140,6 +140,7 @@ export default function HubPage({ sidebarFilter = 'all', sidebarTag = 'all' }: H
             </div>
           </div>
         ))}
+        
         {filteredPrompts.length === 0 && (
           <div className="form-container" style={{ textAlign: 'center', padding: '3rem' }}>
             <p>Ничего не найдено 😢</p>

@@ -30,46 +30,26 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const login = async (email: string, password: string): Promise<boolean> => {
-    setLoading(true);
-    
-    // Имитация задержки сети
-    await new Promise(resolve => setTimeout(resolve, 500));
-    
-    // Простая заглушка: любой email и пароль (кроме пустых) подходят
     if (email && password && email.includes('@')) {
       const newUser = {
         id: Date.now().toString(),
         name: email.split('@')[0],
-        email: email,
+        email,
       };
       setUser(newUser);
       localStorage.setItem('user', JSON.stringify(newUser));
-      setLoading(false);
       return true;
     }
-    
-    setLoading(false);
     return false;
   };
 
   const register = async (name: string, email: string, password: string): Promise<boolean> => {
-    setLoading(true);
-    
-    await new Promise(resolve => setTimeout(resolve, 500));
-    
     if (name && email && password && email.includes('@')) {
-      const newUser = {
-        id: Date.now().toString(),
-        name: name,
-        email: email,
-      };
+      const newUser = { id: Date.now().toString(), name, email };
       setUser(newUser);
       localStorage.setItem('user', JSON.stringify(newUser));
-      setLoading(false);
       return true;
     }
-    
-    setLoading(false);
     return false;
   };
 

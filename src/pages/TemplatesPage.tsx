@@ -16,7 +16,7 @@ const templates: Template[] = [
     id: 1,
     title: "Код-ревью ассистент",
     description: "Проверяет код на ошибки, уязвимости и предлагает улучшения",
-    prompt: "## Инструкция\nТы - эксперт по код-ревью с {{лет}} лет опыта.\n\nПроанализируй следующий код и укажи:\n→ Потенциальные баги\n→ Улучшения производительности\n→ Рекомендации по безопасности\n→ Рекомендации по стилю кода\n\nКОД:\n```\n{{code}}\n```\n\nЯзык программирования: {{language}}",
+    prompt: "## Инструкция\nТы — эксперт по код-ревью с {{лет}} лет опыта.\n\nПроанализируй следующий код и укажи:\n→ Потенциальные баги\n→ Улучшения производительности\n→ Рекомендации по безопасности\n→ Рекомендации по стилю кода\n\nКОД:\n```\n{{code}}\n```\n\nЯзык программирования: {{language}}",
     category: "Программирование",
     icon: "💻"
   },
@@ -32,7 +32,7 @@ const templates: Template[] = [
     id: 3,
     title: "Email-писатель",
     description: "Помогает писать профессиональные письма",
-    prompt: "## Роль\nТы - профессиональный копирайтер и PR-специалист.\n\nНапиши email на тему: {{topic}}\n\n**Стиль:** {{style}} (формальный/неформальный/дружеский)\n**Получатель:** {{recipient}}\n**Цель письма:** {{goal}}\n\n**Требования:**\n→ Приветствие\n→ Основная мысль\n→ Призыв к действию\n→ Подпись",
+    prompt: "## Роль\nТы — профессиональный копирайтер и PR-специалист.\n\nНапиши email на тему: {{topic}}\n\n**Стиль:** {{style}} (формальный/неформальный/дружеский)\n**Получатель:** {{recipient}}\n**Цель письма:** {{goal}}\n\n**Требования:**\n→ Приветствие\n→ Основная мысль\n→ Призыв к действию\n→ Подпись",
     category: "Бизнес",
     icon: "📧"
   },
@@ -40,7 +40,7 @@ const templates: Template[] = [
     id: 4,
     title: "Переводчик с сохранением стиля",
     description: "Переводит текст, сохраняя стилистику и терминологию",
-    prompt: "Ты - профессиональный переводчик. Переведи следующий текст с {{source_lang}} на {{target_lang}}.\n\nТЕКСТ:\n```\n{{text}}\n```\n\n**Требования:**\n- Сохрани стиль оригинального текста\n- Сохрани форматирование\n- Для терминов из области {{domain}} используй специализированный словарь\n- CAPS для важных частей",
+    prompt: "Ты — профессиональный переводчик. Переведи следующий текст с {{source_lang}} на {{target_lang}}.\n\nТЕКСТ:\n```\n{{text}}\n```\n\n**Требования:**\n- Сохрани стиль оригинального текста\n- Сохрани форматирование\n- Для терминов из области {{domain}} используй специализированный словарь\n- CAPS для важных частей",
     category: "Текст",
     icon: "🌐"
   },
@@ -56,7 +56,7 @@ const templates: Template[] = [
     id: 6,
     title: "Генератор идей для постов",
     description: "Генерирует идеи для социальных сетей и блогов",
-    prompt: "Ты - креативный маркетолог. Сгенерируй {{count}} идей для постов в социальных сетях.\n\n**Тема:** {{topic}}\n**Платформа:** {{platform}} (Telegram/Instagram/VK/Twitter)\n**Целевая аудитория:** {{audience}}\n\n**Формат идей:**\n→ Заголовок\n→ Краткое описание\n→ Тип контента (текст/видео/опрос/карусель)\n→ Хэштеги\n\n💡 CAPS для ключевых преимуществ",
+    prompt: "Ты — креативный маркетолог. Сгенерируй {{count}} идей для постов в социальных сетях.\n\n**Тема:** {{topic}}\n**Платформа:** {{platform}} (Telegram/Instagram/VK/Twitter)\n**Целевая аудитория:** {{audience}}\n\n**Формат идей:**\n→ Заголовок\n→ Краткое описание\n→ Тип контента (текст/видео/опрос/карусель)\n→ Хэштеги\n\n💡 CAPS для ключевых преимуществ",
     category: "Маркетинг",
     icon: "💡"
   },
@@ -72,7 +72,7 @@ const templates: Template[] = [
     id: 8,
     title: "Резюме анализатора",
     description: "Помогает улучшить резюме",
-    prompt: "## Роль\nТы - HR-специалист с {{experience}} лет опыта.\n\nПроанализируй резюме кандидата на позицию {{position}}.\n\nРЕЗЮМЕ:\n```\n{{resume}}\n```\n\n**Что оценить:**\n→ Сильные стороны\n→ Что можно улучшить\n→ Соответствие требованиям вакансии\n→ Рекомендации по доработке\n\nВАЖНО: дай конкретные советы по улучшению",
+    prompt: "## Роль\nТы — HR-специалист с {{experience}} лет опыта.\n\nПроанализируй резюме кандидата на позицию {{position}}.\n\nРЕЗЮМЕ:\n```\n{{resume}}\n```\n\n**Что оценить:**\n→ Сильные стороны\n→ Что можно улучшить\n→ Соответствие требованиям вакансии\n→ Рекомендации по доработке\n\nВАЖНО: дай конкретные советы по улучшению",
     category: "Карьера",
     icon: "📄"
   }
@@ -115,8 +115,20 @@ export default function TemplatesPage() {
           <button
             key={cat}
             onClick={() => setSelectedCategory(cat)}
-            className={selectedCategory === cat ? 'btn' : 'btn-secondary'}
-            style={{ padding: '0.5rem 1rem' }}
+            style={{
+              padding: '0.5rem 1rem',
+              borderRadius: '20px',
+              border: 'none',
+              cursor: 'pointer',
+              transition: 'background 0.2s ease, color 0.2s ease',
+              background: selectedCategory === cat ? 'var(--primary)' : 'transparent',
+              color: selectedCategory === cat ? 'white' : 'var(--text-primary)',
+              // Убираем изменение font-weight, чтобы ширина не менялась
+              fontWeight: 'normal',
+              minWidth: '80px',
+              textAlign: 'center'
+            }}
+            aria-label={`Категория ${cat}`}
           >
             {cat}
           </button>
@@ -128,10 +140,10 @@ export default function TemplatesPage() {
           <div key={template.id} className="card">
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', flexWrap: 'wrap' }}>
               <div style={{ flex: 1 }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem', flexWrap: 'wrap' }}>
                   <span style={{ fontSize: '1.5rem' }}>{template.icon}</span>
                   <h3 style={{ margin: 0 }}>{template.title}</h3>
-                  <span className="tag">{template.category}</span>
+                  <span className="tag" style={{ cursor: 'default' }}>{template.category}</span>
                 </div>
                 <p style={{ color: 'var(--text-secondary)', fontSize: '0.875rem', marginBottom: '1rem' }}>
                   {template.description}

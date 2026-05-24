@@ -34,14 +34,17 @@ export default function Sidebar({ onFilterChange, onTagSelect, selectedTag, curr
         </div>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
           {allTags.map(tag => (
-            <span
-              key={tag}
+            <span 
+              key={tag} 
               className={`tag ${selectedTag === tag ? 'tag-active' : ''}`}
               onClick={() => handleTagClick(tag)}
               role="button"
               tabIndex={0}
               aria-label={`Фильтр по тегу ${tag}`}
-              style={{ transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)', cursor: 'pointer' }}
+              style={{ 
+                transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                cursor: 'pointer'
+              }}
             >
               #{tag}
             </span>
@@ -55,12 +58,12 @@ export default function Sidebar({ onFilterChange, onTagSelect, selectedTag, curr
           <span style={{ color: 'var(--text-muted)', fontSize: '0.75rem' }}>▼</span>
         </div>
         <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
-          <li
+          <li 
             onClick={() => handleFilterClick('all')}
             role="button"
             tabIndex={0}
             aria-label="Показать все промпты"
-            style={{
+            style={{ 
               padding: '8px 12px',
               cursor: 'pointer',
               borderRadius: '8px',
@@ -77,12 +80,12 @@ export default function Sidebar({ onFilterChange, onTagSelect, selectedTag, curr
             <span>📋 Все промпты</span>
             {currentFilter === 'all' && <span style={{ fontSize: '0.75rem' }}>✓</span>}
           </li>
-          <li
+          <li 
             onClick={() => handleFilterClick('favorites')}
             role="button"
             tabIndex={0}
             aria-label="Показать только избранное"
-            style={{
+            style={{ 
               padding: '8px 12px',
               cursor: 'pointer',
               borderRadius: '8px',

@@ -10,7 +10,6 @@ export default function SearchPage() {
   const publicPrompts = getPublicPrompts();
   
   const [results, setResults] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (query.length >= 2) {
@@ -19,10 +18,8 @@ export default function SearchPage() {
         (prompt.tags && prompt.tags.toLowerCase().includes(query.toLowerCase()))
       );
       setResults(filtered);
-      setLoading(false);
     } else {
       setResults([]);
-      setLoading(false);
     }
   }, [query, publicPrompts]);
 
@@ -37,12 +34,7 @@ export default function SearchPage() {
         По запросу: <strong>“{query}”</strong>
       </p>
 
-      {loading ? (
-        <div className="form-container" style={{ textAlign: 'center', padding: '3rem' }}>
-          <div style={{ display: 'inline-block', width: '40px', height: '40px', border: '3px solid var(--border-color)', borderTopColor: 'var(--primary)', borderRadius: '50%', animation: 'spin 1s linear infinite' }}></div>
-          <p style={{ marginTop: '1rem' }}>Загрузка...</p>
-        </div>
-      ) : results.length === 0 ? (
+      {results.length === 0 ? (
         <div className="form-container" style={{ textAlign: 'center', padding: '3rem' }}>
           <p>😢 Ничего не найдено по запросу “{query}”</p>
           <button className="btn" onClick={() => navigate('/hub')} style={{ marginTop: '1rem' }}>

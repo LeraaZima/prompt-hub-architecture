@@ -1,17 +1,23 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDebounce } from '../hooks/useDebounce';
 import { usePrompts } from '../context/PromptContext';
 
 export default function SearchBar() {
   const { getPublicPrompts } = usePrompts();
-  const publicPrompts = getPublicPrompts();
+  const rawPrompts = getPublicPrompts();
+  
+  // Стабилизируем ссылку на массив (если содержимое не изменилось, то и массив будет тот же)
+  const publicPrompts = useMemo(() => rawPrompts, [rawPrompts.length, JSON.stringify(rawPrompts)]);
   
   const [query, setQuery] = useState('');
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const debouncedQuery = useDebounce(query, 300);
   const navigate = useNavigate();
+
+  // Для предотвращения лишних вызовов setSuggestions
+  const prevSuggestionsRef = useRef<string[]>([]);
 
   useEffect(() => {
     if (debouncedQuery.length >= 2) {
@@ -23,9 +29,17 @@ export default function SearchBar() {
         .flatMap(p => p.tags ? p.tags.split(',').map(t => t.trim()) : [])
         .filter(tag => tag.toLowerCase().includes(lowerQuery));
       const uniqueSuggestions = Array.from(new Set([...matchedTitles, ...matchedTags])).slice(0, 6);
-      setSuggestions(uniqueSuggestions);
+      
+      // Сравниваем с предыдущим значением, чтобы избежать лишних обновлений
+      if (JSON.stringify(uniqueSuggestions) !== JSON.stringify(prevSuggestionsRef.current)) {
+        setSuggestions(uniqueSuggestions);
+        prevSuggestionsRef.current = uniqueSuggestions;
+      }
     } else {
-      setSuggestions([]);
+      if (prevSuggestionsRef.current.length !== 0) {
+        setSuggestions([]);
+        prevSuggestionsRef.current = [];
+      }
     }
   }, [debouncedQuery, publicPrompts]);
 
