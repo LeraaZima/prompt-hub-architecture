@@ -15,7 +15,6 @@ export default function PromptEditor({ value, onChange, placeholder }: PromptEdi
 
   const highlightText = (text: string) => {
     let highlighted = text;
-    
     highlighted = highlighted.replace(/^##\s+(.+)$/gm, '<span class="hljs-keyword">##</span> <span class="hljs-title">$1</span>');
     highlighted = highlighted.replace(/\{\{(\w+)\}\}/g, '<span class="hljs-variable">{{$1}}</span>');
     highlighted = highlighted.replace(/\b([A-Z]{3,})\b/g, '<span class="hljs-strong">$1</span>');
@@ -25,7 +24,6 @@ export default function PromptEditor({ value, onChange, placeholder }: PromptEdi
     highlighted = highlighted.replace(/<(\/?)(\w+)([^>]*)>/g, '<span class="hljs-tag">&lt;$1$2$3&gt;</span>');
     highlighted = highlighted.replace(/[∈∩∪¬⊕]/g, '<span class="hljs-metaglyph">$&</span>');
     highlighted = highlighted.replace(/"(\w+)":/g, '<span class="hljs-json-key">"$1"</span>:');
-    
     return highlighted;
   };
 
@@ -57,6 +55,7 @@ export default function PromptEditor({ value, onChange, placeholder }: PromptEdi
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}
         placeholder={placeholder}
+        aria-label="Текст промпта"
         style={{
           width: '100%',
           minHeight: '300px',

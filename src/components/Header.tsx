@@ -12,10 +12,10 @@ export default function Header() {
     <>
       <header className="glass-header">
         <div className="container">
-          <Link to="/" className="logo">
+          <Link to="/" className="logo" aria-label="Главная">
             🧠 PromptHub
           </Link>
-          <nav className="nav-links">
+          <nav className="nav-links" aria-label="Основное меню">
             <Link to="/hub" className="nav-link">Промпт-хаб</Link>
             <Link to="/knowledge" className="nav-link">База знаний</Link>
             <Link to="/templates" className="nav-link">Шаблоны</Link>
@@ -32,6 +32,7 @@ export default function Header() {
                 </span>
                 <button
                   onClick={logout}
+                  aria-label="Выйти"
                   style={{
                     background: 'rgba(255,255,255,0.2)',
                     border: 'none',
@@ -47,6 +48,7 @@ export default function Header() {
             ) : (
               <button
                 onClick={() => setShowAuthModal(true)}
+                aria-label="Войти"
                 style={{
                   background: 'var(--gradient)',
                   border: 'none',
@@ -63,7 +65,6 @@ export default function Header() {
           </div>
         </div>
       </header>
-      
       <AuthModal isOpen={showAuthModal} onClose={() => setShowAuthModal(false)} />
     </>
   );

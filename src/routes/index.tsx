@@ -3,6 +3,7 @@ import { Routes, Route } from 'react-router-dom';
 
 const HomePage = lazy(() => import('../pages/HomePage'));
 const HubPage = lazy(() => import('../pages/HubPage'));
+const PromptDetailPage = lazy(() => import('../pages/PromptDetailPage'));
 const EditorPage = lazy(() => import('../pages/EditorPage'));
 const KnowledgePage = lazy(() => import('../pages/KnowledgePage'));
 const ResearchPage = lazy(() => import('../pages/ResearchPage'));
@@ -26,7 +27,11 @@ export default function AppRoutes({ sidebarFilter, sidebarTag }: AppRoutesProps)
     <Suspense fallback={<PageLoader />}>
       <Routes>
         <Route path="/" element={<HomePage />} />
-        <Route path="/hub" element={<HubPage sidebarFilter={sidebarFilter} sidebarTag={sidebarTag} />} />
+        <Route 
+          path="/hub" 
+          element={<HubPage sidebarFilter={sidebarFilter} sidebarTag={sidebarTag} />} 
+        />
+        <Route path="/hub/prompt/:id" element={<PromptDetailPage />} />
         <Route path="/editor" element={<EditorPage />} />
         <Route path="/editor/:id" element={<EditorPage />} />
         <Route path="/knowledge" element={<KnowledgePage />} />

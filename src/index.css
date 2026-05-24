@@ -572,3 +572,41 @@ body.dark .hljs-code {
     padding: 1.5rem;
   }
 }
+
+
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.suggestions-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: var(--bg-card);
+  border-radius: 16px;
+  box-shadow: var(--shadow-lg);
+  margin-top: 8px;
+  overflow: hidden;
+  z-index: 1000;
+  border: 1px solid var(--border-color);
+  backdrop-filter: blur(8px);
+}
+
+.suggestion-item {
+  padding: 12px 16px;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 0.875rem;
+  color: var(--text-primary);
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.suggestion-item:last-child { border-bottom: none; }
+.suggestion-item:hover {
+  background: rgba(99, 102, 241, 0.1);
+  padding-left: 24px;
+}

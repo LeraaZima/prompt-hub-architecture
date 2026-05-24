@@ -32,10 +32,7 @@ function Layout() {
             </div>
           )}
           <main id="main-content" style={{ flex: 1 }}>
-            <AppRoutes 
-              sidebarFilter={sidebarFilter}
-              sidebarTag={sidebarTag}
-            />
+            <AppRoutes sidebarFilter={sidebarFilter} sidebarTag={sidebarTag} />
           </main>
         </div>
       </div>

@@ -16,46 +16,32 @@ export default function Sidebar({ onFilterChange, onTagSelect, selectedTag, curr
   )).sort();
 
   const handleTagClick = (tag: string) => {
-    if (onTagSelect) {
-      onTagSelect(tag);
-    }
+    if (onTagSelect) onTagSelect(tag);
   };
 
   const handleFilterClick = (filter: string) => {
-    if (onFilterChange) {
-      onFilterChange(filter);
-    }
+    if (onFilterChange) onFilterChange(filter);
   };
 
   return (
     <aside className="sidebar-glass">
       <h4 style={{ marginBottom: '1rem' }}>🔍 Фильтры</h4>
-      
+
       <div style={{ marginBottom: '1.5rem' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
-          <p style={{ fontWeight: 600, margin: 0 }}>🏷️ По тегам</p>
+          <p style={{ fontWeight: 600, margin: 0 }}>🏷️ Теги</p>
           <span style={{ color: 'var(--text-muted)', fontSize: '0.75rem' }}>▼</span>
         </div>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
-          <span 
-            className={`tag ${selectedTag === 'all' ? 'tag-active' : ''}`}
-            onClick={() => handleTagClick('all')}
-            style={{ 
-              transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-              cursor: 'pointer'
-            }}
-          >
-            Все теги
-          </span>
           {allTags.map(tag => (
-            <span 
-              key={tag} 
+            <span
+              key={tag}
               className={`tag ${selectedTag === tag ? 'tag-active' : ''}`}
               onClick={() => handleTagClick(tag)}
-              style={{ 
-                transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                cursor: 'pointer'
-              }}
+              role="button"
+              tabIndex={0}
+              aria-label={`Фильтр по тегу ${tag}`}
+              style={{ transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)', cursor: 'pointer' }}
             >
               #{tag}
             </span>
@@ -69,9 +55,12 @@ export default function Sidebar({ onFilterChange, onTagSelect, selectedTag, curr
           <span style={{ color: 'var(--text-muted)', fontSize: '0.75rem' }}>▼</span>
         </div>
         <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
-          <li 
+          <li
             onClick={() => handleFilterClick('all')}
-            style={{ 
+            role="button"
+            tabIndex={0}
+            aria-label="Показать все промпты"
+            style={{
               padding: '8px 12px',
               cursor: 'pointer',
               borderRadius: '8px',
@@ -88,9 +77,12 @@ export default function Sidebar({ onFilterChange, onTagSelect, selectedTag, curr
             <span>📋 Все промпты</span>
             {currentFilter === 'all' && <span style={{ fontSize: '0.75rem' }}>✓</span>}
           </li>
-          <li 
+          <li
             onClick={() => handleFilterClick('favorites')}
-            style={{ 
+            role="button"
+            tabIndex={0}
+            aria-label="Показать только избранное"
+            style={{
               padding: '8px 12px',
               cursor: 'pointer',
               borderRadius: '8px',
